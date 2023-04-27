@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: datavisualisation
+  labels:
+    app: data_vis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: data_vis
+  template:
+    metadata:
+      labels:
+        app: data_vis
+    spec:
+      volumes:
+        - name: data-volume
+          persistentVolumeClaim:
+            claimName: cluster-gke-claim
+      containers:
+        - name: datavisualisation
+          image: jupyter/datascience-notebook:latest
+          workingDir: /GCP
+          ports:
+            - containerPort: 8888
+          volumeMounts:
+            - mountPath: "/GCP/Volume"
+              name: data-volume

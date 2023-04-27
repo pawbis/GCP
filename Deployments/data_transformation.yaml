@@ -1,0 +1,23 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: data-transformation
+spec:
+  schedule: "*/3 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          volumes:
+            - name: data-volume
+              persistentVolumeClaim:
+                claimName: cluster-gke-claim
+          containers:
+          - name: datatransformation
+            image: pawbis/datatransformation:1.0
+            args: ["/GCP/Volume/data.json"]
+            volumeMounts:
+              - name: data-volume
+                mountPath: "/GCP/Volume"
+          restartPolicy: OnFailure
+          

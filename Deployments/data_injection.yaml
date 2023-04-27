@@ -1,0 +1,23 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: data-injection
+spec:
+  schedule: "*/2 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          volumes:
+            - name: data-volume
+              persistentVolumeClaim:
+                claimName: cluster-gke-claim
+          containers:
+          - name: datainjection
+            image: pawbis/datainjection:1.0
+            args: ["/GCP/Volume", "data.json"]
+            volumeMounts:
+              - name: data-volume
+                mountPath: "/GCP/Volume"
+          restartPolicy: OnFailure
+          
