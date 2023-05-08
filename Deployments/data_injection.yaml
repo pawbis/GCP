@@ -8,10 +8,6 @@ spec:
     spec:
       template:
         spec:
-          volumes:
-            - name: data-volume
-              persistentVolumeClaim:
-                claimName: cluster-gke-claim
           containers:
           - name: datainjection
             image: pawbis/datainjection:1.0
@@ -19,5 +15,9 @@ spec:
             volumeMounts:
               - name: data-volume
                 mountPath: "/GCP/Volume"
+          volumes:
+          - name: data-volume
+            gcePersistentDisk:
+              pdName: data-volume
+              fsType: ext4
           restartPolicy: OnFailure
-          

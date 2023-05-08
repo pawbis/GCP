@@ -1,15 +1,4 @@
-#created project named terraform before
-#service account
-resource "google_service_account" "terraform-service" {
-    account_id = "terraform-service"
-}
-
-#iam member and 
-resource "google_project_iam_member" "terraform-service" {
-    project = "terraform"
-    role = "roles/owner"
-    member = google_service_account.terraform-service.email
-}
+#created project named terraform before, and service account
 
 #vpc network
 resource "google_compute_network" "vpc_network" {
@@ -28,12 +17,12 @@ resource "google_compute_subnetwork" "vpc_subnetwork" {
 
     secondary_ip_range {
         range_name = "gke-pods"
-        ip_cidr_range = "10.10.0.0/28"
+        ip_cidr_range = "10.10.0.0/24"
     }
 
     secondary_ip_range {
         range_name = "gke-svc"
-        ip_cidr_range = "10.11.0.0/28"
+        ip_cidr_range = "10.11.0.0/24"
     }
 }
 
@@ -82,7 +71,6 @@ resource "google_container_node_pool" "terraform-node" {
         preemptible = false
         machine_type = "e2-small"
 
-    service_account = google_service_account.terraform-service.email
     oauth_scopes = [
         "https://www.googleapis.com/auth/cloud-platform"
      ]

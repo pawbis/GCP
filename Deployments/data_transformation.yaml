@@ -9,9 +9,10 @@ spec:
       template:
         spec:
           volumes:
-            - name: data-volume
-              persistentVolumeClaim:
-                claimName: cluster-gke-claim
+          - name: data-volume
+            gcePersistentDisk:
+              pdName: data-volume
+              fsType: ext4
           containers:
           - name: datatransformation
             image: pawbis/datatransformation:1.0
@@ -20,4 +21,3 @@ spec:
               - name: data-volume
                 mountPath: "/GCP/Volume"
           restartPolicy: OnFailure
-          

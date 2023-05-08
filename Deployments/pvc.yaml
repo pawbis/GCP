@@ -3,10 +3,9 @@ kind: PersistentVolumeClaim
 metadata:
   name: cluster-gke-claim
 spec:
-  storageClassName: manual
+  storageClassName: disk-volume
   accessModes:
     - ReadWriteMany
   resources:
     requests:
       storage: 5Gi
-  volumeName: disk-volume
